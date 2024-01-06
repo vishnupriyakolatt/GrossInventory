@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Navbar from "../Components/NavBar/Navbar";
 function Addproduct() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -26,7 +27,7 @@ function Addproduct() {
     console.log(formData.get('file'))
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/inventory/addproducts",
+        "http://localhost:9003/api/inventory/addproducts",
         formData,
         {
           headers: {
@@ -72,8 +73,10 @@ function Addproduct() {
 
   return (
     <>
+ <Navbar/>
       <div className="flex">
-        <div className="relative flex flex-col justify-center min-h-screen overflow-hidden w-full">
+     
+      <div className="relative flex flex-col justify-center min-h-screen overflow-hidden w-full mt-12">
           <div className="w-full p-10 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
             <h1 className="text-3xl text-center text-gray-900 font-bold mb-2">
               ADD Transaction
@@ -123,7 +126,7 @@ function Addproduct() {
                 name="productcode"
                 id="productcode"
                 value={productcode}
-                onChange={(e) => setproductcode(e.target.value)} // Corrected onChange
+                onChange={(e) => setproductcode(e.target.value)} 
               />
             </div>
             <div className="mb-2">
@@ -173,13 +176,13 @@ function Addproduct() {
                 onChange={(e) => setcategory(e.target.value)}
               >
                 <option value=''>Select Category</option>
-                <option value='Classics'>Diary</option>
-                <option value='Detective and Mystery'>
-                  Detective and Mystery
+                <option value='Diary'>Diary</option>
+                <option value='Vegetables'>
+                Vegetables
                 </option>
-                <option value='Fantasy and Romance'>Fantasy and Romance</option>
-                <option value='Historical and Literary Fiction'>
-                  Historical and Literary Fiction
+                <option value='Fruits'>Fruits</option>
+                <option value='Store Items'>
+              Store Items
                 </option>
               </select>
             </div>

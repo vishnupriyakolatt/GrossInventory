@@ -13,7 +13,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'Weddingpro',
-    allowed_formats: ['jpg', 'png'],
+    allowed_formats: ['jpg', 'png','jpeg'],
     limits: { fileSize: 1024 * 1024 * 5 },
     
   }
