@@ -1,72 +1,78 @@
-import React from 'react'
-import Video from '../asset/production_id_4121740 (2160p).mp4'
-import { FaCartPlus } from "react-icons/fa6";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'
+import Video from '../asset/production_id_4121740 (2160p).mp4';
+import { FaCartPlus } from "react-icons/fa";
+
 function Product() {
-    return (
-      <>
-<div className='h-screen mt-30 relative flex flex-col items-center'>
-  <video
-    autoPlay
-    loop
-    muted
-    className='w-full h-3/4 object-cover'
-  >
-    <source src={Video} type='video/mp4' />
-    Your browser does not support the video tag.
-  </video>
- 
-  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-8xl font-bold whitespace-nowrap">
-WELCOME TO G-CART
-  </div>
-</div>
+  const [products, setProducts] = useState([]);
 
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/api/inventory/getallproducts');
+      const data = response.data;
+      setProducts(data);
+    } catch (error) {
+      console.error('Error fetching books:', error);
+    }
+  };
+  useEffect(() => {
+    fetchBooks();
+  }, []);
 
-       <div class="relative mt-[-190px] flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-  <div
-    class="relative mx-4 mt-4 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
-    <img
-      src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-      alt="ui/ux review check" />
-    <div
-      class="absolute inset-0 w-full h-full to-bg-black-10 bg-gradient-to-tr from-transparent via-transparent to-black/60">
+  return (
+<>
+  <div className='h-screen mt-30 relative flex flex-col items-center'>
+    <video
+      autoPlay
+      loop
+      muted
+      className='w-full h-3/4 object-cover'
+    >
+      <source src={Video} type='video/mp4' />
+      Your browser does not support the video tag.
+    </video>
+
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-8xl font-bold whitespace-nowrap">
+      WELCOME TO G-CART
     </div>
-    <button
-      class="!absolute  top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-      type="button">
-      <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-          <path
-            d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z">
-          </path>
-        </svg>
-      </span>
-    </button>
-  </div>
-  <div class="p-6">
-    <div class="flex items-center justify-between mb-3">
-      <h5 class="block font-sans text-xl antialiased font-medium leading-snug tracking-normal text-blue-gray-900">
-        Wooden House, Florida
-      </h5>
-      <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
-  <span className='black' style={{ fontWeight: 'extra-bold', color: 'black', fontSize: '1.4em' }}>₹ 500/kg</span>
-</p>
-
-    </div>
-
-
   </div>
 
-  <div class="p-3 flex ml-5 mr-5 items-center justify-center bg-gray-900 rounded-md text-white">
-  <FaCartPlus class="text-2xl mr-2" />
-  <span class="text-lg font-bold">ADD TO CART</span>
-</div>
+  <div className="flex flex-wrap justify-center gap-4">
+    {products.map((product) => (
+      <div key={product.id} className="relative mt-[-120px] ml-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+        <img className="object-cover" src={product.image} alt="product image" />
+        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">{product.offer}% OFF</span>
 
+        <div className="mt-4 px-5 pb-5">
+          <h5 className="text-xl tracking-tight text-slate-900">{product.name}</h5>
+          <h6 className="text-xl tracking-tight  text-slate-900">{product.category}</h6>
+          <div className="mt-2 mb-5 flex items-center bg-linear-gradient(to top, #dfe9f3 0%, white 100%) justify-between">
+            <p>
+              <span className="text-2xl font-bold text-slate-900">{product.rate}/kg</span>
+            </p>
+            <div className="flex items-center">
+             
+                <svg aria-hidden="true" className="h-5 w-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+         
+              <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">stock: {product.stock}</span>
+            </div>
+          </div>
+          <a href="#" className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+            <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Add to cart
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
+</>
 
- 
-
-</div>
-      </>
-    );
-  }
   
-export default Product
+  );
+}
+
+export default Product;

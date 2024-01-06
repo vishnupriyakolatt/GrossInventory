@@ -11,6 +11,7 @@ function Addproduct() {
   const [category, setcategory] = useState("");
   const [stock, setstock] = useState("");
   const [image, setImage] = useState("");
+  const[offer,setoffer]=useState("")
 
   const addproduct = async (e) => {
     e.preventDefault();
@@ -21,7 +22,8 @@ function Addproduct() {
     formData.append("category", category);
     formData.append("stock", stock);
     formData.append("file", image);
-
+    formData.append("offer",offer);
+    console.log(formData.get('file'))
     try {
       const response = await axios.post(
         "http://localhost:9000/api/inventory/addproducts",
@@ -33,31 +35,37 @@ function Addproduct() {
         }
       );
       console.log(response);
-      if (response.data.message) {
+      if (response.data.msg) {
         navigate('/');
-        toast.success('Registration successful!', {
+        toast.success('product added successfully!', {
           position: toast.POSITION.TOP_CENTER,
          
         });
      
       }
     } catch (error) {
-      console.error('Error:', error);
-
-      toast.error(
-        error?.response?.data?.msg ||
-          error?.message ||
-          'Something went wrong ! please try again',
-        {
+      if (error.response && error.response.status === 500) {
+        toast.error("Internal Server Error. Please try again later.", {
           position: toast.POSITION.TOP_CENTER,
-        }
-      );
-    }
+        });
+      } else {
+        console.error("Error:", error);
+        toast.error(
+          error?.response?.data?.msg ||
+            error?.message ||
+            "Something went wrong! Please try again.",
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+      }
   };
+}
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
+    console.log(file)
   };
 
   
@@ -188,9 +196,26 @@ function Addproduct() {
                 name="stock"
                 id="stock"
                 value={stock}
-                onChange={(e) => setstock(e.target.value)} // Corrected onChange
+                onChange={(e) => setstock(e.target.value)} 
               />
             </div>
+            <div className="mb-2">
+              <label
+                htmlFor="name"
+                className="block text-sm font-semibold text-gray-800"
+              >
+      Offer
+              </label>
+              <input
+                type="text"
+                className="block w-full px-4 py-2 mt-2 text-gray-800 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                name="offer"
+                id="offer"
+                value={offer}
+                onChange={(e) => setoffer(e.target.value)} 
+              />
+            </div>
+            
             <button
               onClick={addproduct}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"

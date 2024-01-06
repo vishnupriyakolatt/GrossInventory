@@ -20,6 +20,8 @@ app.use(morgan('dev'));
 
 
 
+app.use("/",(req,res,next)=>{console.log(req.body)
+  next()})
 app.get("/",(req,res)=>res.send ("connectee"))
 app.use('/api/inventory', InventoryRoutes);
 app.listen(PORT, () => {
